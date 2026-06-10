@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        .Result{
+            border: 2px solid red;
+        }
+    </style>
+<head>
+    <title>MJ Website</title>
+</head>
+<body>
+
+    <form action="/ascii-art" method="POST">
+    <textarea name="input" placeholder="input a text">{{.Input}}</textarea>
+    <select name = "banner">
+        <option value="" selected disabled> Select a banner</option>
+        <option value="standard.txt" {{if eq .Banner "standard.txt"}}selected{{end}}> Standard</option>
+        <option value="shadow.txt" {{if eq .Banner "shadow.txt"}}selected{{end}}>Shadow</option>
+        <option value="thinkertoy.txt" {{if eq .Banner "thinkertoy.txt"}}selected{{end}}>Thinkertoy</option>
+    </select>
+    <button type="submit">Generate</button>
+</form>
+
+<pre class="Result">{{.Result}}</pre>
+</body> 
+</html>
