@@ -9,7 +9,7 @@ import (
 
 type Data struct {
 	Result string
-	Input string
+	Input  string
 	Banner string
 }
 
@@ -33,11 +33,12 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodGet {
+		fmt.Println(r.Method)
 		err := tmpl.Execute(w, Data{})
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		}
+		return
 	}
 
 	if r.Method == http.MethodPost {
@@ -47,12 +48,18 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		_, err := asciiart.ValidateInput(input)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
+			tmpl.Execute(w, Data{
+				Result: err.Error(),
+			})
 			return
 		}
 
 		banner, err := asciiart.BannerCheck("banners/" + bannerName)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
+			tmpl.Execute(w, Data{
+				Result: err.Error(),
+			})
 			return
 		}
 
@@ -60,7 +67,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 		err = tmpl.Execute(w, Data{
 			Result: result,
-			Input: input,
+			Input:  input,
 			Banner: bannerName,
 		})
 		if err != nil {

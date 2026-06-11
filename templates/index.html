@@ -12,6 +12,13 @@
 <body>
 
     <form action="/ascii-art" method="POST">
+
+        {{if .Error}}
+    <div class="error">
+        {{.Error}}
+    </div>
+    {{end}}
+
     <textarea name="input" placeholder="input a text">{{.Input}}</textarea>
     <select name = "banner">
         <option value="" selected disabled> Select a banner</option>
