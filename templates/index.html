@@ -1,34 +1,60 @@
 <!DOCTYPE html>
 <html>
     <style>
+        body{
+            background-color: coral;
+        }
         .Result{
             width: fit-content;
-            border: 2px solid red;
+            border: 2px solid black;
+            margin: 0 auto;
         }
+
+        h2{
+            text-align: center;
+            color: red;
+        }
+        
+        .div1{
+            margin: auto;
+            width: 500px;
+
+        }
+
     </style>
+
 <head>
     <title>MJ Website</title>
 </head>
 <body>
+    <header style="text-align: center;">
+        <h1>Ascii Art Web</h1>
+    </header>
+    <div class="div1">
+ <form action="/ascii-art" method="POST">
 
-    <form action="/ascii-art" method="POST">
-
-        {{if .Error}}
-    <div class="error">
-        {{.Error}}
-    </div>
-    {{end}}
-
+        
     <textarea name="input" placeholder="input a text">{{.Input}}</textarea>
-    <select name = "banner">
+    <select name = "banner" style="display: block;">
         <option value="" selected disabled> Select a banner</option>
         <option value="standard.txt" {{if eq .Banner "standard.txt"}}selected{{end}}> Standard</option>
         <option value="shadow.txt" {{if eq .Banner "shadow.txt"}}selected{{end}}>Shadow</option>
         <option value="thinkertoy.txt" {{if eq .Banner "thinkertoy.txt"}}selected{{end}}>Thinkertoy</option>
     </select>
-    <button type="submit">Generate</button>
+
+    <button type="submit" style="display: block;">Generate</button>
+
 </form>
 
-<pre class="Result">{{.Result}}</pre>
+    </div>
+   
+{{if .Error}}
+    <div class="error">
+       <h2>{{.Error}}</h2>
+    </div>
+    {{end}}
+
+
+<pre class="Result" style="color: black;">{{.Result}}</pre>
 </body> 
 </html>

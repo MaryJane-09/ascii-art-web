@@ -11,6 +11,7 @@ type Data struct {
 	Result string
 	Input  string
 	Banner string
+	Error string
 }
 
 var tmpl = template.Must(template.ParseFiles("templates/index.html"))
@@ -33,7 +34,6 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodGet {
-		fmt.Println(r.Method)
 		err := tmpl.Execute(w, Data{})
 		if err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -49,7 +49,8 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.Execute(w, Data{
-				Result: err.Error(),
+				Error: err.Error(),
+				Input:  input,
 			})
 			return
 		}
@@ -58,7 +59,8 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.Execute(w, Data{
-				Result: err.Error(),
+				Error: "Invalid Banner File. Pick a valid Banner.",
+				Input:  input,
 			})
 			return
 		}
