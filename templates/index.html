@@ -1,60 +1,334 @@
 <!DOCTYPE html>
 <html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Art Web</title>
     <style>
-        body{
-            background-color: coral;
-        }
-        .Result{
-            width: fit-content;
-            border: 2px solid black;
-            margin: 0 auto;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        h2{
-            text-align: center;
-            color: red;
+        body {
+            min-height: 100vh;
+            padding: 40px;
+
+            font-family: Consolas, monospace;
+
+            background:
+                radial-gradient(circle at top,
+                    #1a1545 0%,
+                    #0d1029 40%,
+                    #060816 100%);
+
+            color: #e7e9ff;
         }
-        
-        .div1{
+
+        body::before {
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(138, 92, 255, 0.08),
+                    transparent 60%
+                );
+
+            pointer-events: none;
+        }
+            
+
+        .container {
+            max-width: 850px;
             margin: auto;
-            width: 500px;
+        }
 
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 4rem;
+            font-weight: bold;
+
+            background: linear-gradient(
+                90deg,
+                #d26cff,
+                #8a5cff,
+                #4d7dff,
+                #63c7ff
+            );
+
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+        }
+
+        header p {
+            margin-top: 15px;
+            color: #b7bdd8;
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+
+        width: 80%;
+        margin: 0 auto 40px auto;
+
+        background: rgba(20, 25, 60, 0.92);
+
+        border: 1px solid rgba(138, 92, 255, 0.3);
+
+        border-radius: 20px;
+
+        padding: 25px;
+
+        backdrop-filter: blur(10px);
+
+        box-shadow:
+            0 15px 35px rgba(0, 0, 0, 0.6),
+            0 5px 15px rgba(138, 92, 255, 0.2),
+            0 0 30px rgba(77, 125, 255, 0.1);
+
+        transform: translateY(-5px);
+        position: relative;
+        }
+
+            .form-container::after {
+        content: "";
+
+        position: absolute;
+
+        left: 10%;
+        right: 10%;
+        bottom: -15px;
+
+        height: 20px;
+
+        background: rgba(138, 92, 255, 0.2);
+
+        filter: blur(20px);
+
+        z-index: -1;
+    }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+            padding: 10px;
+            font-size: 18px;
+            font-family: Consolas, monospace;
+            color: white;
+            background: rgba(8, 10, 35, 0.8);
+            border: 1px solid #8a5cff;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        textarea:focus {
+            box-shadow:
+                0 0 10px rgba(138, 92, 255, 0.4);
+        }
+
+        select {
+            width: 250px;
+            padding: 12px;
+            background: rgba(8, 10, 35, 0.8);
+            color: white;
+            font-size: 16px;
+            border-radius: 12px;
+            border: 1px solid #8a5cff;
+        }
+
+        button {
+            width: 220px;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background: linear-gradient(
+                90deg,
+                #b43cff,
+                #7b5cff,
+                #4d7dff
+            );
+
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 0 15px rgba(180, 60, 255, 0.5),
+                0 0 25px rgba(77, 125, 255, 0.5);
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .error {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .error h2 {
+            color: #ff6b81;
+        }
+
+        .result {
+            width: fit-content;
+
+            max-width: 95%;
+
+            margin: 30px auto;
+
+            padding: 25px;
+
+            overflow-x: auto;
+            background: linear-gradient(
+                135deg,
+                #120d35,
+                #091633
+            );
+
+            border: 2px solid #5b5cff;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            overflow-x: auto;
+
+            box-shadow:
+                0 0 20px rgba(91, 92, 255, 0.2),
+                0 0 40px rgba(99, 199, 255, 0.1);
+
+            margin-bottom: 30px;
+        }
+
+        .result pre {
+            margin: 0;
+
+            color: #8ec5ff;
+
+            font-size: 15px;
+            font-family: Consolas, monospace;
+
+            white-space: pre;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #9da5c6;
+        }
+
+        footer span {
+            color: #8a5cff;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            button,
+            select {
+                width: 100%;
+            }
+
+            body {
+                padding: 20px;
+            }
         }
 
     </style>
-
-<head>
-    <title>MJ Website</title>
 </head>
+
 <body>
-    <header style="text-align: center;">
-        <h1>Ascii Art Web</h1>
-    </header>
-    <div class="div1">
- <form action="/ascii-art" method="POST">
 
-        
-    <textarea name="input" placeholder="input a text">{{.Input}}</textarea>
-    <select name = "banner" style="display: block;">
-        <option value="" selected disabled> Select a banner</option>
-        <option value="standard.txt" {{if eq .Banner "standard.txt"}}selected{{end}}> Standard</option>
-        <option value="shadow.txt" {{if eq .Banner "shadow.txt"}}selected{{end}}>Shadow</option>
-        <option value="thinkertoy.txt" {{if eq .Banner "thinkertoy.txt"}}selected{{end}}>Thinkertoy</option>
-    </select>
+    <div class="container">
 
-    <button type="submit" style="display: block;">Generate</button>
+        <header>
+            <h1>ASCII Art Web</h1>
+            <p>Transform your text into stunning ASCII art</p>
+        </header>
 
-</form>
+        <div class="form-container">
+
+            <form action="/ascii-art" method="POST">
+
+                <textarea
+                    name="input"
+                    placeholder="Enter text here..."
+                >{{.Input}}</textarea>
+
+                <select name="banner" required>
+                    <option value="" disabled>Select a banner</option>
+
+                    <option value="standard.txt"
+                        {{if eq .Banner "standard.txt"}}selected{{end}}>
+                        Standard
+                    </option>
+
+                    <option value="shadow.txt"
+                        {{if eq .Banner "shadow.txt"}}selected{{end}}>
+                        Shadow
+                    </option>
+
+                    <option value="thinkertoy.txt"
+                        {{if eq .Banner "thinkertoy.txt"}}selected{{end}}>
+                        Thinkertoy
+                    </option>
+                </select>
+
+                <button type="submit">
+                    Generate
+                </button>
+
+            </form>
+
+        </div>
+
+        {{if .Error}}
+        <div class="error">
+            <h2>{{.Error}}</h2>
+        </div>
+        {{end}}
+
+        {{if .Result}}
+        <div class="result">
+            <pre>{{.Result}}</pre>
+        </div>
+        {{end}}
+
+        <footer>
+            Built by <span>MJ</span>
+        </footer>
 
     </div>
-   
-{{if .Error}}
-    <div class="error">
-       <h2>{{.Error}}</h2>
-    </div>
-    {{end}}
 
-
-<pre class="Result" style="color: black;">{{.Result}}</pre>
-</body> 
+</body>
 </html>
