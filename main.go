@@ -11,7 +11,7 @@ type Data struct {
 	Result string
 	Input  string
 	Banner string
-	Error string
+	Error  string
 }
 
 var tmpl = template.Must(template.ParseFiles("templates/index.html"))
@@ -50,7 +50,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.Execute(w, Data{
 				Error: err.Error(),
-				Input:  input,
+				Input: input,
 			})
 			return
 		}
@@ -60,7 +60,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.Execute(w, Data{
 				Error: "Invalid Banner File. Pick a valid Banner.",
-				Input:  input,
+				Input: input,
 			})
 			return
 		}
@@ -85,6 +85,10 @@ func main() {
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/ascii-art", asciiArtHandler)
 	fmt.Println("server running at port :8080")
+
+	http.Handle("/static/",
+		http.StripPrefix("/static/",
+			http.FileServer(http.Dir("static"))))
 
 	http.ListenAndServe(":8080", nil)
 }
