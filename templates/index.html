@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCII Art Web</title>
+
     <style>
         * {
             margin: 0;
@@ -12,335 +13,149 @@
         }
 
         body {
+            background-color: #f4f4f4;
+            font-family: Arial, Helvetica, sans-serif;
             min-height: 100vh;
-            padding: 50px 40px 40px;
-            background:
-    linear-gradient(
-        rgba(7,11,32,0.45),
-        rgba(7,11,32,0.65)
-    ),
-                url("/static/sunset.png");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: white;
-            font-family: system-ui, sans-serif;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(
-                circle at center,
-                rgba(255, 92, 168, 0.07),
-                transparent 55%
-            );
-            pointer-events: none;
+            padding: 30px;
         }
 
         .container {
-            max-width: 860px;
-            margin: auto;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        /* ── Header ── */
         header {
             text-align: center;
-            margin-bottom: 36px;
+            margin-bottom: 30px;
         }
 
         header h1 {
-            font-size: clamp(2.8rem, 7vw, 5rem);
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            background: linear-gradient(90deg, #ff76c8, #c85cff, #7d6bff, #69b7ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: none;
-            filter: drop-shadow(0 0 18px rgba(200,92,255,0.35));
+            font-size: 2.5rem;
+            color: #222;
         }
 
-        header p {
-            margin-top: 10px;
-            color: rgba(216,216,255,0.75);
-            font-size: 1rem;
-            letter-spacing: 0.01em;
-        }
-
-        /* ── Form card ── */
         .form-container {
-            width: 80%;
-            padding: 32px 36px 28px;
-            background: rgba(12,16,52,0.72);
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
-            border-radius: 22px;
-            border: 1px solid rgba(255,92,168,0.22);
-            box-shadow:
-                0 24px 60px rgba(0,0,0,0.6),
-                0 0 0 1px rgba(255,255,255,0.04) inset,
-                0 0 50px rgba(255,92,168,0.10);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-container:hover {
-            transform: translateY(-2px);
-            box-shadow:
-                0 30px 70px rgba(0,0,0,0.65),
-                0 0 0 1px rgba(255,255,255,0.05) inset,
-                0 0 60px rgba(255,92,168,0.14);
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         form {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            margin: 0 auto;
-        }
-
-        /* ── Textarea ── */
-        .textarea-wrap {
-            width: 100%;
-            position: relative;
+            gap: 15px;
         }
 
         textarea {
             width: 100%;
-            min-height: 130px;
+            min-height: 140px;
             resize: vertical;
-            padding: 16px 18px;
-            border-radius: 14px;
-            background: rgba(7,11,32,0.85);
-            border: 1px solid rgba(255,118,200,0.3);
-            color: white;
+            padding: 10px;
             font-size: 16px;
-            font-family: Consolas, monospace;
-            outline: none;
-            line-height: 1.6;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
-        textarea::placeholder {
-            color: rgba(255,255,255,0.25);
-        }
-
-        textarea:focus {
-            border-color: rgba(255,118,200,0.55);
-            box-shadow: 0 0 0 3px rgba(255,118,200,0.10);
-        }
-
-        .char-count {
-            position: absolute;
-            bottom: 10px;
-            right: 14px;
-            font-size: 11px;
-            color: rgba(255,255,255,0.25);
-            font-family: system-ui, sans-serif;
-            pointer-events: none;
-        }
-
-        .char-count.near-limit {
-            color: rgba(255,170,80,0.7);
-        }
-
-        /* ── Select ── */
         select {
-            width: 100%;
-            max-width: 340px;
-            padding: 13px 18px;
-            border-radius: 50px;
-            background: rgba(7,11,32,0.85);
-            color: rgba(255,255,255,0.85);
-            border: 1px solid rgba(125,107,255,0.35);
-            font-size: 15px;
-            outline: none;
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(200,150,255,0.7)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            padding-right: 40px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        select:focus {
-            border-color: rgba(125,107,255,0.6);
-            box-shadow: 0 0 0 3px rgba(125,107,255,0.10);
-        }
-
-        select option {
-            background: #0d1140;
-            color: white;
-        }
-
-        /* ── Generate button ── */
-        button[type="submit"] {
-            width: 100%;
-            max-width: 340px;
-            padding: 14px;
-            border: none;
-            border-radius: 50px;
+            width: 200px;
+            padding: 10px;
             font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 0.04em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 150px;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2563eb;
             color: white;
+            font-size: 16px;
             cursor: pointer;
-            background: linear-gradient(90deg, #ff5ca8, #b14cff, #4f7dff);
-            background-size: 200% auto;
-            transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        button[type="submit"]:hover {
-            background-position: right center;
-            transform: translateY(-2px);
-            box-shadow:
-                0 0 22px rgba(255,92,168,0.45),
-                0 0 44px rgba(79,125,255,0.25);
+        button:hover {
+            opacity: 0.9;
         }
 
-        button[type="submit"]:active {
-            transform: translateY(0);
-        }
-
-        /* ── Error ── */
         .error {
             text-align: center;
-            margin-top: 28px;
-            padding: 16px 24px;
-            border-radius: 14px;
-            background: rgba(255,60,90,0.12);
-            border: 1px solid rgba(255,80,100,0.25);
+            margin-top: 20px;
         }
 
         .error h2 {
-            color: #ff9abf;
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        /* ── Result ── */
-        .result-wrap {
-            margin-top: 32px;
-            position: relative;
-        }
-
-        .result-toolbar {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .result-toolbar button {
-            width: auto;
-            max-width: none;
-            padding: 7px 16px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.14);
-            color: rgba(255,255,255,0.75);
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s, transform 0.15s;
-        }
-
-        .result-toolbar button:hover {
-            background: rgba(255,255,255,0.13);
-            color: white;
-            transform: translateY(-1px);
-            box-shadow: none;
+            color: red;
         }
 
         .result {
-            width: 100%;
+            margin: 30px auto;
+            width: fit-content;
+            max-width: 100%;
             overflow-x: auto;
-            text-align: center;
-            border-radius: 18px;
-            padding: 28px 32px;
-            background: linear-gradient(135deg, #120d3f, #0c1a50);
-            border: 1px solid rgba(255,92,168,0.3);
-            box-shadow:
-                0 0 30px rgba(255,92,168,0.18),
-                0 0 70px rgba(79,125,255,0.10);
+            background: white;
+            border: 2px solid #222;
+            border-radius: 10px;
+            padding: 20px;
         }
 
         .result pre {
-            margin: 0;
-            color: #ffffff;
-            font-family: Consolas, monospace;
             white-space: pre;
-            line-height: 1.4;
-            text-shadow:
-                0 0 6px rgba(255,92,168,0.25),
-                0 0 18px rgba(105,183,255,0.2);
+            font-family: monospace;
+            margin: 0;
         }
 
-        /* ── Footer ── */
         footer {
             text-align: center;
-            margin-top: 36px;
-            color: rgba(216,216,255,0.45);
-            font-size: 14px;
-        }
-
-        footer span {
-            color: #ff76c8;
-            font-weight: 700;
-        }
-
-        /* ── Responsive ── */
-        @media (max-width: 768px) {
-            body { padding: 24px 16px; }
-
-            .form-container { padding: 24px 20px; }
-
-            select,
-            button[type="submit"] {
-                max-width: 100%;
-            }
-
-            .result { padding: 20px 16px; }
+            margin-top: 30px;
+            color: #666;
         }
     </style>
 </head>
 
 <body>
+
     <div class="container">
 
         <header>
             <h1>ASCII Art Web</h1>
-            <p>Transform your text into stunning ASCII art</p>
         </header>
 
         <div class="form-container">
+
             <form action="/ascii-art" method="POST">
 
-                <div class="textarea-wrap">
-                    <textarea
-                        name="input"
-                        placeholder="Enter text here..."
-                        maxlength="200"
-                        id="textInput"
-                    >{{.Input}}</textarea>
-                    <span class="char-count" id="charCount">0 / 200</span>
-                </div>
+                <textarea
+                    name="input"
+                    placeholder="Enter text here..."
+                >{{.Input}}</textarea>
 
                 <select name="banner" required>
-                    <option value="" disabled>Select a style</option>
-                    <option value="standard.txt" {{if eq .Banner "standard.txt"}}selected{{end}}>Standard</option>
-                    <option value="shadow.txt"   {{if eq .Banner "shadow.txt"}}selected{{end}}>Shadow</option>
-                    <option value="thinkertoy.txt" {{if eq .Banner "thinkertoy.txt"}}selected{{end}}>Thinkertoy</option>
+                    <option value="" disabled>Select a banner</option>
+
+                    <option value="standard.txt"
+                        {{if eq .Banner "standard.txt"}}selected{{end}}>
+                        Standard
+                    </option>
+
+                    <option value="shadow.txt"
+                        {{if eq .Banner "shadow.txt"}}selected{{end}}>
+                        Shadow
+                    </option>
+
+                    <option value="thinkertoy.txt"
+                        {{if eq .Banner "thinkertoy.txt"}}selected{{end}}>
+                        Thinkertoy
+                    </option>
                 </select>
 
-                <button type="submit">Generate</button>
+                <button type="submit">
+                    Generate
+                </button>
 
             </form>
+
         </div>
 
         {{if .Error}}
@@ -350,57 +165,16 @@
         {{end}}
 
         {{if .Result}}
-        <div class="result-wrap">
-            <div class="result-toolbar">
-                <button type="button" onclick="copyResult()">Copy</button>
-                <button type="button" onclick="downloadResult()">Download</button>
-            </div>
-            <div class="result" id="resultBox">
-                <pre id="resultText">{{.Result}}</pre>
-            </div>
+        <div class="result">
+            <pre>{{.Result}}</pre>
         </div>
         {{end}}
 
         <footer>
-            Built by <span>MJ</span>
+            Built by MJ
         </footer>
 
     </div>
 
-    <script>
-        const input = document.getElementById('textInput');
-        const counter = document.getElementById('charCount');
-
-        if (input && counter) {
-            const update = () => {
-                const len = input.value.length;
-                const max = input.maxLength;
-                counter.textContent = len + ' / ' + max;
-                counter.classList.toggle('near-limit', len > max * 0.8);
-            };
-            input.addEventListener('input', update);
-            update();
-        }
-
-        function copyResult() {
-            const text = document.getElementById('resultText');
-            if (!text) return;
-            navigator.clipboard.writeText(text.innerText).then(() => {
-                const btn = event.target;
-                btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = 'Copy', 1800);
-            });
-        }
-
-        function downloadResult() {
-            const text = document.getElementById('resultText');
-            if (!text) return;
-            const blob = new Blob([text.innerText], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'ascii-art.txt';
-            a.click();
-        }
-    </script>
 </body>
 </html>
