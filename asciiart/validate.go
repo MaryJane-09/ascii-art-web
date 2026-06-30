@@ -11,7 +11,7 @@ func ValidateInput(input string) (rune, error) {
 			continue
 		}
 		if r < 32 || r > 126 {
-			return r, errors.New("invalid Character")
+			return r, errors.New("Invalid Character")
 		}
 	}
 	return 0, nil

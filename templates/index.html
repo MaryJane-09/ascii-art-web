@@ -44,7 +44,7 @@
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         textarea {
@@ -57,27 +57,71 @@
             border-radius: 5px;
         }
 
+        textarea:focus {
+            outline: none;
+            border-color: #25054c;
+            box-shadow: 0 0 0 4px rgba(37, 5, 76, 0.2);
+        }
+
         select {
             width: 200px;
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            border-radius: 8px;
+            border: 2px solid #25054c;
+            color: #333;
+            background: white;
+            cursor: pointer;
+            grid-template-columns: auto;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        select:hover {
+            border-color: #25054c;
+        }
+
+        select:focus {
+            border-color: #25054c;
+            box-shadow: 0 0 0 3px rgba(37, 5, 76, 0.2);
+        }
+
+        option{
+            background-color: white;
+            color: #25054c;
+            border: black;
         }
 
         button {
             width: 150px;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            background-color: #2563eb;
+            padding: 14px;
+            border: 2px solid black;
+            border-radius: 12px;
+            background-color: #25054c;
             color: white;
             font-size: 16px;
+            font-weight: bold;
+            align-self: center;
             cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+
         }
 
         button:hover {
             opacity: 0.9;
+            background-color: #3b0a7c;
+            text-decoration: wavy;
+            padding: 16px;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            background-color: #1a0335;
+            transform: translateY(0);
+        }
+
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(37, 5, 76, 0.25);
         }
 
         .error {
@@ -109,7 +153,7 @@
         footer {
             text-align: center;
             margin-top: 30px;
-            color: #666;
+            color: #0e033b;
         }
     </style>
 </head>
@@ -128,11 +172,12 @@
 
                 <textarea
                     name="input"
-                    placeholder="Enter text here..."
+                    placeholder="Enter text here..." 
+                    required
                 >{{.Input}}</textarea>
 
                 <select name="banner" required>
-                    <option value="" disabled>Select a banner</option>
+                    <option selected value="" disabled>Select a banner</option>
 
                     <option value="standard.txt"
                         {{if eq .Banner "standard.txt"}}selected{{end}}>

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"time"
 )
 
 type Data struct {
@@ -36,14 +37,32 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		err := tmpl.Execute(w, Data{})
 		if err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			fmt.Println("Template error:", err)
+			return
 		}
-		return
 	}
 
 	if r.Method == http.MethodPost {
 		input := r.FormValue("input")
 		bannerName := r.FormValue("banner")
+
+		if input == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			tmpl.Execute(w, Data{
+				Error: "Input a text",
+			})
+			return
+		}
+
+		if bannerName == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			tmpl.Execute(w, Data{
+				Error: "Select a banner",
+				Input: input,
+				Banner: bannerName,
+			})
+			return
+		}
 
 		_, err := asciiart.ValidateInput(input)
 		if err != nil {
@@ -73,11 +92,13 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 			Banner: bannerName,
 		})
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Println("Template error:", err)
 			return
 		}
 
 	}
+	fmt.Println(r.Method, "/ascii-art")
+	fmt.Println(time.DateTime)
 
 }
 
@@ -85,10 +106,5 @@ func main() {
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/ascii-art", asciiArtHandler)
 	fmt.Println("server running at port :8080")
-
-	http.Handle("/static/",
-		http.StripPrefix("/static/",
-			http.FileServer(http.Dir("static"))))
-
 	http.ListenAndServe(":8080", nil)
 }
