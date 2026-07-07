@@ -12,6 +12,7 @@ type Data struct {
 	Result string
 	Input  string
 	Banner string
+	Theme  string
 	Error  string
 }
 
@@ -45,6 +46,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		input := r.FormValue("input")
 		bannerName := r.FormValue("banner")
+		theme := r.FormValue("theme")
 
 		if input == "" {
 			w.WriteHeader(http.StatusBadRequest)
@@ -57,8 +59,8 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		if bannerName == "" {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.Execute(w, Data{
-				Error: "Select a banner",
-				Input: input,
+				Error:  "Select a banner",
+				Input:  input,
 				Banner: bannerName,
 			})
 			return
@@ -90,6 +92,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 			Result: result,
 			Input:  input,
 			Banner: bannerName,
+			Theme:  theme,
 		})
 		if err != nil {
 			fmt.Println("Template error:", err)
@@ -103,6 +106,9 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/ascii-art", asciiArtHandler)
 	fmt.Println("server running at port :8080")
