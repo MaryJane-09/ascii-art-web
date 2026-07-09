@@ -46,29 +46,11 @@
                     </option>
                 </select>
 
-                <div class="themes">
-                    <!-- Sun Icon -->
-                    <span>☀️</span>
-                    
-                    <label class="switch">
-                        <input name="theme" 
-                        type="checkbox" 
-                        id="theme-toggle" 
-                        value="dark"
-                        {{if eq .Theme "dark"}}checked{{end}}>
-                        <span class="slider"></span>
-                    </label>
-                    <!-- Moon Icon -->
-                    <span>🌙</span>
-
-                    <button type="submit" name="action" value="apply"> Apply</button>
-                </div>
+                
 
                 <button type="submit" name="action" value="generate">
                     Generate
                 </button>
-
-            </form>
 
         </div>
 
@@ -87,6 +69,29 @@
         <footer>
             Built by MJ
         </footer>
+
+        </form>
+
+            <form action="/theme" method="post">
+                <div class="themes">
+                    <!-- Sun Icon -->
+                    <span>☀️</span>
+                    
+                    <label class="switch">
+                        <input name="theme" 
+                        type="checkbox" 
+                        id="theme-toggle" 
+                        value="dark"
+                        {{if eq .Theme "dark"}}checked{{end}}>
+                        <span class="slider"></span>
+                    </label>
+                    <!-- Moon Icon -->
+                    <span>🌙</span>
+
+                    <button class="but" type="submit" name="action" value="apply"> Apply</button>
+                </div>
+
+            </form>
 
     </div>
 
