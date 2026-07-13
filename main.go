@@ -5,18 +5,22 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 	"time"
 )
 
 type Data struct {
-	Result string
-	Input  string
-	Banner string
-	Theme  string
-	Error  string
+	Result     string
+	Input      string
+	Banner     string
+	Theme      string
+	TestResult []string
+	Error      string
 }
 
 var tmpl = template.Must(template.ParseFiles("templates/index.html"))
+
+var lastResult string
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
@@ -43,11 +47,23 @@ func themeHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/ascii-art", http.StatusSeeOther)
 
 }
+func exportHandler(w http.ResponseWriter, r *http.Request) {
+
+	body := []byte(lastResult)
+	bodylen := len(body)
+
+	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Content-Length", strconv.Itoa(bodylen))
+	w.Header().Set("Content-Disposition", `attachment; filename="file.txt"`)
+
+	w.Write(body)
+
+}
 
 func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 	theme := "light"
-	if c, err := r.Cookie("theme"); err == nil{
+	if c, err := r.Cookie("theme"); err == nil {
 		theme = c.Value
 	}
 
@@ -67,10 +83,11 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
-		input := r.FormValue("input")
+		Inputtext := r.FormValue("input")
 		bannerName := r.FormValue("banner")
+		action := r.FormValue("action")
 
-		if input == "" {
+		if Inputtext == "" {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.Execute(w, Data{
 				Error: "Input a text",
@@ -83,50 +100,76 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.Execute(w, Data{
 				Error:  "Select a banner",
-				Input:  input,
+				Input:  Inputtext,
 				Banner: bannerName,
-				Theme: theme,
+				Theme:  theme,
 			})
 			return
 		}
 
-		_, err := asciiart.ValidateInput(input)
+		_, err := asciiart.ValidateInput(Inputtext)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.Execute(w, Data{
 				Error: err.Error(),
-				Input: input,
+				Input: Inputtext,
 				Theme: theme,
 			})
 			return
 		}
 
-		banner, err := asciiart.BannerCheck("banners/" + bannerName)
+		BannerFile, err := asciiart.BannerCheck("banners/" + bannerName)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			tmpl.Execute(w, Data{
 				Error: "Invalid Banner File. Pick a valid Banner.",
-				Input: input,
+				Input: Inputtext,
 				Theme: theme,
 			})
 			return
 		}
 
-		result := asciiart.GenerateArt(input, banner)
+		if action == "testAll" {
+			banners := []string{"standard.txt", "shadow.txt", "thinkertoy.txt"}
 
-		err = tmpl.Execute(w, Data{
-			Result: result,
-			Input:  input,
-			Banner: bannerName,
-			Theme:  theme,
-		})
-		if err != nil {
-			fmt.Println("Template error:", err)
-			return
+			var results []string
+
+			for _, name := range banners {
+				banner, _ := asciiart.BannerCheck("banners/" + name)
+				results = append(results, asciiart.GenerateArt(Inputtext, banner))
+			}
+			err = tmpl.Execute(w, Data{
+				TestResult: results,
+				Input:      Inputtext,
+				Theme:      theme,
+			})
+			if err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				tmpl.Execute(w, Data{
+					Error: "Cannot Test all",
+				})
+				return
+			}
+		} else {
+
+			FinalResult := asciiart.GenerateArt(Inputtext, BannerFile)
+			lastResult = FinalResult
+
+			err = tmpl.Execute(w, Data{
+				Result: FinalResult,
+				Input:  Inputtext,
+				Banner: bannerName,
+				Theme:  theme,
+			})
+			if err != nil {
+				fmt.Println("Template error:", err)
+				return
+			}
+
 		}
-
 	}
 	fmt.Println(r.Method, "/ascii-art")
+	fmt.Println()
 	fmt.Println(time.DateTime)
 
 }
@@ -138,6 +181,7 @@ func main() {
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/ascii-art", asciiArtHandler)
 	http.HandleFunc("/theme", themeHandler)
+	http.HandleFunc("/export", exportHandler)
 	fmt.Println("server running at port :8080")
 	http.ListenAndServe(":8080", nil)
 }
