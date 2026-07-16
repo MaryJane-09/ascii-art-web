@@ -116,6 +116,33 @@
             box-shadow: 0 0 0 4px rgba(37, 5, 76, 0.25);
         }
 
+        .link-btn{
+            background: none;
+            cursor: pointer;
+            padding: 0;
+            border: none;
+            color: #25054c;
+        }
+
+        .buttons{
+            display: flex;
+        }
+
+        .extras{
+            display: flex;
+            margin-left: auto;
+            gap: 12px;
+        }
+
+        .extras > *,
+        .themes,
+        .tool {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
         .error {
             text-align: center;
             margin-top: 20px;
@@ -152,31 +179,28 @@
         .themes{
             display: flex;
             gap: 8px;
+            flex-direction: column;
             align-items: center;
         }
 
-        .themes-form{
-            position: relative;
-          align-self: center;
+        .toggle-row{
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+
 
         .switch{
             position: relative;
-            width: 54px;
-            height: 24px;
+            width: 60px;
+            height: 30px;
             display: inline-block;
         }
 
-        .but{
-            width: 50px;
-            padding: 16px;
-            border: 2px solid black;
-            border-radius: 12px;
-            background-color: #25054c;
-            color: white;
-            font-size: 10px;
-            cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.2s ease;
+        .switch input{
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
 
         .slider{
@@ -186,7 +210,7 @@
             top: 0;
             bottom: 0;
             background-color: lightgrey;
-            border-radius: 30px;
+            border-radius: 999px;
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
@@ -197,10 +221,21 @@
             width: 22px;
             height: 22px;
             left: 4px;
+            top: 4px;
             bottom: 4px;
             background-color: white;
             border-radius: 50%;
             transition: transform 0.2s ease;
+        }
+
+        .extras img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .themes img {
+            width: 30px;
+            height: 30px;
         }
 
         .switch input:checked+.slider{
@@ -208,7 +243,7 @@
         }
 
         .switch input:checked+.slider::before{
-            transform: translateX(24px);
+            transform: translateX(30px);
         }
 
         body.dark {
@@ -239,7 +274,7 @@
             color: white;
         }
 
-            body.textarea:focus{
+            body.dark textarea:focus{
             outline: none;
             border-color: #25054c;
             box-shadow: 0 0 0 4px rgba(37, 5, 76, 0.2);

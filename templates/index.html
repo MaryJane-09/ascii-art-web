@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASCII Art Web</title>
 
     <link rel="stylesheet" href="/css/style.css">
- 
 </head>
 
 <body class="{{if eq .Theme "dark"}}dark{{else}}light{{end}}">
@@ -19,41 +19,110 @@
 
         <div class="form-container">
 
-            <form action="/ascii-art" method="POST">
+            <!-- Main Form -->
+            <form id="art-form" action="/ascii-art" method="POST">
 
                 <textarea
                     name="input"
-                    placeholder="Enter text here..." 
-                    required
-                >{{.Input}}</textarea>
+                    placeholder="Enter text here..."
+                    required>{{.Input}}</textarea>
 
                 <select name="banner" required>
-                    <option selected value="" disabled>Select a banner</option>
+                    <option value="" disabled {{if eq .Banner ""}}selected{{end}}>
+                        Select a banner
+                    </option>
 
-                    <option value="standard.txt"
-                        {{if eq .Banner "standard.txt"}}selected{{end}}>
+                    <option value="standard.txt" {{if eq .Banner "standard.txt"}}selected{{end}}>
                         Standard
                     </option>
 
-                    <option value="shadow.txt"
-                        {{if eq .Banner "shadow.txt"}}selected{{end}}>
+                    <option value="shadow.txt" {{if eq .Banner "shadow.txt"}}selected{{end}}>
                         Shadow
                     </option>
 
-                    <option value="thinkertoy.txt"
-                        {{if eq .Banner "thinkertoy.txt"}}selected{{end}}>
+                    <option value="thinkertoy.txt" {{if eq .Banner "thinkertoy.txt"}}selected{{end}}>
                         Thinkertoy
                     </option>
                 </select>
 
-                
+                <div class="buttons">
 
-                <button type="submit" name="action" value="generate">
-                    Generate
-                </button>
-                
-                <a href="/export">Export</a>
-                <a href="/testAll">Test all</a>
+                    <button type="submit" name="action" value="generate">
+                        Generate
+                    </button>
+
+                    <div class="extras">
+
+                        <!-- Theme -->
+                        <div class="themes">
+
+                            <div class="toggle-row">
+
+                                <img src="/static/sun.png" alt="Sun">
+
+                                <label class="switch">
+                                    <input
+                                        form="theme-form"
+                                        type="checkbox"
+                                        name="theme"
+                                        value="dark"
+                                        {{if eq .Theme "dark"}}checked{{end}}>
+                                    <span class="slider"></span>
+                                </label>
+
+                                <img src="/static/moon.svg" alt="Moon">
+
+                            </div>
+
+                            <button
+                                form="theme-form"
+                                type="submit"
+                                name="action"
+                                value="apply"
+                                class="link-btn">
+                                Apply
+                            </button>
+
+                        </div>
+
+                        <!-- Export -->
+                        <div class="tool">
+
+                            <img src="/static/export.png" alt="Export">
+
+                            <button
+                                type="submit"
+                                name="action"
+                                value="export"
+                                class="link-btn">
+                                Export
+                            </button>
+
+                        </div>
+
+                        <!-- Test All -->
+                        <div class="tool">
+
+                            <img src="/static/testall.png" alt="Test all">
+
+                            <button
+                                type="submit"
+                                name="action"
+                                value="testall"
+                                class="link-btn">
+                                Test all
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+            <!-- Theme Form -->
+            <form id="theme-form" action="/ascii-art" method="POST"></form>
 
         </div>
 
@@ -69,34 +138,20 @@
         </div>
         {{end}}
 
+        {{if .TestResult}}
+        <div class="result">
+            {{range .TestResult}}
+                <pre>{{.}}</pre>
+            {{end}}
+        </div>
+        {{end}}
+
         <footer>
             Built by MJ
         </footer>
 
-        </form>
-
-            <form action="/theme" method="post">
-                <div class="themes">
-                    <!-- Sun Icon -->
-                    <span>☀️</span>
-                    
-                    <label class="switch">
-                        <input name="theme" 
-                        type="checkbox" 
-                        id="theme-toggle" 
-                        value="dark"
-                        {{if eq .Theme "dark"}}checked{{end}}>
-                        <span class="slider"></span>
-                    </label>
-                    <!-- Moon Icon -->
-                    <span>🌙</span>
-
-                    <button class="but" type="submit" name="action" value="apply"> Apply</button>
-                </div>
-
-            </form>
-
     </div>
 
 </body>
+
 </html>
