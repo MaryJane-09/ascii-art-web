@@ -27,7 +27,7 @@
                     placeholder="Enter text here..."
                     required>{{.Input}}</textarea>
 
-                <select name="banner" required>
+                <select name="banner">
                     <option value="" disabled {{if eq .Banner ""}}selected{{end}}>
                         Select a banner
                     </option>
@@ -121,11 +121,11 @@
 
             </form>
 
-            <!-- Theme Form -->
+           <!-- Theme Form -->
             <form id="theme-form" action="/ascii-art" method="POST"></form>
 
         </div>
-
+ 
         {{if .Error}}
         <div class="error">
             <h2>{{.Error}}</h2>
@@ -141,7 +141,8 @@
         {{if .TestResult}}
         <div class="result">
             {{range .TestResult}}
-                <pre>{{.}}</pre>
+            <h3> {{.Name}} </h3>
+            <pre>{{.Art}}</pre>
             {{end}}
         </div>
         {{end}}

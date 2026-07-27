@@ -14,13 +14,21 @@ type Data struct {
 	Input      string
 	Banner     string
 	Theme      string
-	TestResult []string
+	TestResult []TestResult
 	Error      string
+}
+
+type TestResult struct {
+	Name string
+	Art  string
 }
 
 var tmpl = template.Must(template.ParseFiles("templates/index.html"))
 
 var lastResult string
+var lastInput string
+var lastBanner string
+var lastTestResult []TestResult
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
@@ -63,8 +71,17 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodGet {
+
+		fmt.Println("Loading:")
+		fmt.Println("Input:", lastInput)
+		fmt.Println("Banner:", lastBanner)
+		fmt.Println("Result length:", len(lastResult))
 		err := tmpl.Execute(w, Data{
-			Theme: theme,
+			Input:  lastInput,
+			Banner: lastBanner,
+			Result: lastResult,
+			TestResult: lastTestResult,
+			Theme:  theme,
 		})
 		if err != nil {
 			fmt.Println("Template error:", err)
@@ -77,7 +94,7 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 		switch action {
 
-			case "apply":
+		case "apply":
 			theme = r.FormValue("theme")
 			if theme == "" {
 				theme = "light"
@@ -141,6 +158,14 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 			FinalResult := asciiart.GenerateArt(Inputtext, BannerFile)
 			lastResult = FinalResult
+			lastInput = Inputtext
+			lastBanner = bannerName
+			lastTestResult = nil
+
+			fmt.Println("Saved:")
+			fmt.Println("Input:", lastInput)
+			fmt.Println("Banner:", lastBanner)
+			fmt.Println("Result length:", len(lastResult))
 
 			err = tmpl.Execute(w, Data{
 				Result: FinalResult,
@@ -166,12 +191,12 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			banners := []string{"standard.txt", "shadow.txt", "thinkertoy.txt"}
+			banners := []string{"Standard", "Shadow", "Thinkertoy"}
 
-			var results []string
+			var results []TestResult
 
 			for _, name := range banners {
-				banner, err := asciiart.BannerCheck("banners/" + name)
+				banner, err := asciiart.BannerCheck("banners/" + name + ".txt")
 				if err != nil {
 					w.WriteHeader(http.StatusBadRequest)
 
@@ -183,8 +208,18 @@ func asciiArtHandler(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
-				results = append(results, asciiart.GenerateArt(Inputtext, banner))
+				art := asciiart.GenerateArt(Inputtext, banner)
+
+				results = append(results, TestResult{
+					Name: name,
+					Art:  art,
+				})
 			}
+			lastInput = Inputtext
+			lastTestResult = results
+			lastResult = ""
+			lastBanner = ""
+
 			err := tmpl.Execute(w, Data{
 				TestResult: results,
 				Input:      Inputtext,
